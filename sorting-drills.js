@@ -1,13 +1,14 @@
+const LinkedList = require('./linkedList')
 /*
 1
 
-    - After 3 recursive calls, [21 , 1] are returned 
+    - After 3 recursive calls, [21 , 1] are returned
 
-    - [21] [1] [26] [45] [29] [28] [2] [9] [16] [49] [39] [27] [43] [34] [46] [40] 
-    
+    - [21] [1] [26] [45] [29] [28] [2] [9] [16] [49] [39] [27] [43] [34] [46] [40]
+
     - [21] [40]
 
-      [1, 21] [40, 46] 
+      [1, 21] [40, 46]
 
     - [1, 2, 21, 26, 28, 29, 45]     [27, 34, 39, 40, 43, 46, 49]
 
@@ -26,7 +27,7 @@
        12 3 9 10        14 13 15 16 19 17    after new pivot positions have been determined
 
        Resulting list when using the first item as pivot after the 2nd partitioning:
-       
+
        13 3 9 12 10       15 16 19 17
 
 */
@@ -98,6 +99,35 @@ function swap(array, i, j){
     array[j] = temp
     return array
 }
+function mergeSortLinked(ll) {
+    if (ll.size() <= 1) {
+        return ll;
+    }
+
+    let left = new LinkedList()
+    let right = new LinkedList()
+
+    right.head = ll.middleList()
+    left.head = ll.splitListMiddle()
+
+    left = mergeSortLinked(left);
+    right = mergeSortLinked(right);
+    return mergeLinked(left, right, ll);
+};
+function mergeLinked(left, right, ll) {
+
+    while (left.head !== null && right.head !== null) {
+        if (left.head.value < right.head.value) {
+            ll.head = left.head.next;
+        }
+        else {
+            ll.head = right.head.next;
+        }
+    }
+        ll.head.next = left.head;
+        ll.head.next = right.head;
+    return ll;
+};
 
 function main(){
 
@@ -105,10 +135,17 @@ function main(){
 
     //console.log(quickSort(array))
 
-    console.log(mergeSort(array))
+    // console.log(mergeSort(array))
+
+    let ll = new LinkedList();
+    ll.insertFirst('Apollo');
+    ll.insertLast('Boomer');
+    ll.insertLast('Helo');
+    ll.insertLast('Husker');
+    ll.insertLast('Starbuck');
+    ll.insertLast('Tauhida');
+    ll.display()
+    mergeSortLinked(ll)
 }
 
 main()
-
-
-
